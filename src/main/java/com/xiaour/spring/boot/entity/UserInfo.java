@@ -7,11 +7,15 @@ public class UserInfo {
 
     private String name;
 
-    private String userName;
+    private String phone;
     
-    private String passWrod;
+    private String passWord;
+    
+    private String ident;
     
     private Date createTime;
+    
+    private String status;
 
 	public Integer getId() {
 		return id;
@@ -29,20 +33,12 @@ public class UserInfo {
 		this.name = name;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getPassWord() {
+		return passWord;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassWrod() {
-		return passWrod;
-	}
-
-	public void setPassWrod(String passWrod) {
-		this.passWrod = passWrod;
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
 	}
 
 	public Date getCreateTime() {
@@ -52,5 +48,31 @@ public class UserInfo {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getIdent() {
+		return ident;
+	}
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
+	
     
 }

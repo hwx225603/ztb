@@ -5,5 +5,5 @@ import com.xiaour.spring.boot.entity.UserInfo;
 public interface UserInfoService {
 	
 	public UserInfo findById(Integer id);
-
+	
 }

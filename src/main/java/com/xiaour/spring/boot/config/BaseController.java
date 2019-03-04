@@ -13,5 +13,8 @@ public class BaseController {
     public ResultModel error(ResultStatus error) {
         return new ResultModel(error);
     }
+    public ResultModel error(String msg) {
+        return new ResultModel(-1000,msg);
+    }
     
 }

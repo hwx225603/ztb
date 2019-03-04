@@ -4,16 +4,32 @@ package com.xiaour.spring.boot.controller;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xiaour.spring.boot.config.BaseController;
+import com.xiaour.spring.boot.config.ResultModel;
+import com.xiaour.spring.boot.config.ResultStatus;
+import com.xiaour.spring.boot.config.TokenModel;
 import com.xiaour.spring.boot.entity.UserInfo;
 import com.xiaour.spring.boot.mapper.UserInfoMapper;
 import com.xiaour.spring.boot.service.RedisService;
+import com.xiaour.spring.boot.service.TokenService;
+import com.xiaour.spring.boot.service.UserInfoService;
 import com.xiaour.spring.boot.utils.JsonUtil;
+
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jsms.api.SendSMSResult;
+import cn.jsms.api.common.SMSClient;
+import cn.jsms.api.common.model.SMSPayload;
+import cn.jsms.api.common.model.SMSPayload.Builder;
 
 
 /**
@@ -21,13 +37,19 @@ import com.xiaour.spring.boot.utils.JsonUtil;
  */
 @RestController
 @RequestMapping(value="/user")
-public class UserCtorl {
+public class UserCtorl extends BaseController{
 	
 	@Autowired
 	private RedisService redisService;
 	
 	@Autowired  
     private UserInfoMapper userInfoMapper;  
+	
+	@Autowired
+	private UserInfoService userInfoService;
+	
+	@Autowired
+	private TokenService tokenService;
 
     @RequestMapping(value="/index")
     public String index(){
@@ -35,105 +57,77 @@ public class UserCtorl {
     }
     
     /**
-     * 向redis存储值
-     * @param key
-     * @param value
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping("/set")  
-    public String set(String key, String value) throws Exception{
+	 * 登录
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	@RequestMapping(value="/login",method = RequestMethod.POST)
+	public ResultModel login(@NotBlank(message="用户名不能为空") String phone,@NotBlank(message="密码不能为空")String password) {
 
-        redisService.set(key, value);
-        return "success";  
-    }  
-    
-    /**
-     * 获取redis中的值
-     * @param key
-     * @return
-     */
-    @RequestMapping("/get")  
-    public String get(String key){  
-        try {
-			return redisService.get(key);
+		UserInfo user = userInfoMapper.selectByPhone(phone);
+		if (user == null || // 未注册
+				!user.getPassWord().equals(password)) { // 密码错误
+			// 提示用户名或密码错误
+			return error(ResultStatus.USER_NOT_FOUND);
+		}
+		// 生成一个token，保存用户登录状态
+		TokenModel model = tokenService.createToken(user.getId());
+		return ok(model);
+	}
+	/**
+	 * 注册
+	 * @param phone
+	 * @param code
+	 * @param passWord
+	 * @return
+	 */
+	@RequestMapping(value="/reg",method = RequestMethod.POST)
+	public ResultModel register(@NotBlank(message="手机号不能为空") String phone,@NotBlank(message="验证码不能为空")String code,
+			@NotBlank(message="密码不能为空")String passWord) {
+		//校验验证码
+		try {
+			String codeReal = redisService.get("phone");
+			if(null == codeReal) {
+				return error("请重新发送验证码");	
+			}else if(!codeReal.equals(code)){
+				return error("验证码错误");	
+			}else{
+				//判断是否注册
+				UserInfo user = userInfoMapper.selectByPhone(phone);
+				if(null != user) {
+					return error(ResultStatus.USER_HAS_REG);	
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";  
-    }  
+		//插入数据库
+		UserInfo user = new UserInfo();
+		user.setPhone(phone);
+		user.setPassWord(passWord);
+		user.setStatus("1");
+		return ok();
+	}
     
-    /**
-     * 获取数据库中的用户
-     * @param id
-     * @return
-     */
-    @RequestMapping("/getUser/{id}")  
-    public String get(@PathVariable("id")int id){  
-        try {
-        	UserInfo user= userInfoMapper.selectByPrimaryKey(id);
-			return JsonUtil.getJsonString(user);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";  
-    }
-
-
-    public static void main(String[] args) {
-        Map<String,Object> keyMap= new HashMap<>();
-        keyMap.put("id","编号");
-        keyMap.put("name","名称");
-
-        String [] cnCloumn={"编号","名称"};
-
-        System.out.println(Arrays.asList(convertMap(keyMap, cnCloumn)));
-
-    }
-
-    public static String[] convertMap(Map<String,Object> keyMap,String [] dataList){
-
-        for(int i=0;i<dataList.length;i++){
-
-            for(Map.Entry<String, Object> m:keyMap.entrySet()){
-                if(m.getValue().equals(dataList[i])){
-                   dataList[i]=m.getKey();
-                }
-            }
-        }
-
-        return dataList;
-    }
-
-
-    public static String getName(String name,String add){
-        return null;
-    }
-
-    public static void testGetClassName() {
-        // 方法1：通过SecurityManager的保护方法getClassContext()
-        String clazzName = new SecurityManager() {
-            public String getClassName() {
-                return getClassContext()[1].getName();
-            }
-        }.getClassName();
-        System.out.println(clazzName);
-        // 方法2：通过Throwable的方法getStackTrace()
-        String clazzName2 = new Throwable().getStackTrace()[1].getClassName();
-        System.out.println(clazzName2);
-        // 方法3：通过分析匿名类名称()
-        String clazzName3 = new Object() {
-            public String getClassName() {
-                String clazzName = this.getClass().getName();
-                return clazzName.substring(0, clazzName.lastIndexOf('$'));
-            }
-        }.getClassName();
-        System.out.println(clazzName3);
-        //方法4：通过Thread的方法getStackTrace()
-        String clazzName4 = Thread.currentThread().getStackTrace()[2].getClassName();
-        System.out.println(clazzName4);
-    }
-
-
-
+	@RequestMapping(value="/code",method = RequestMethod.POST)
+	public ResultModel getCode(@NotBlank(message="手机号不能为空") String phone) {
+		
+		return ok();
+	}
+	
+	public static void main(String[] args) throws APIConnectionException, APIRequestException {
+		SMSClient sms = new SMSClient("327ea8537faa568aec04cb29","a492e8d9e2ab14f4c91eb752");
+		String verifyCode = String
+				.valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
+		Map<String,String> params = new HashMap<String,String>();
+		System.out.println(verifyCode);
+		params.put("code", verifyCode);
+		Builder b = SMSPayload.newBuilder();
+		b.setMobileNumber("15915448330");
+		b.setTempId(1);
+		b.setTempPara(params);
+		SendSMSResult result = sms.sendTemplateSMS(b.build());
+		System.out.println(result.getMessageId());
+	}
 }
