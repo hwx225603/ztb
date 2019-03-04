@@ -31,20 +31,43 @@ public class TokenServiceImpl implements TokenService{
 		}
         return model;
 	}
-
+	
 	@Override
-	public boolean checkToken(TokenModel model) {
-		return false;
+	public boolean checkToken(TokenModel model) throws Exception {
+		 if (model == null) {
+	            return false;
+	        }
+	        String token = redis.get(String.valueOf(model.getUserId()));
+	        if (token == null || !token.equals(model.getToken())) {
+	            return false;
+	        }
+	        //如果验证成功，说明此用户进行了一次有效操作，延长token的过期时间
+	        redis.expire(String.valueOf(model.getUserId()), Constants.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
+	        return true;
 	}
 
 	@Override
 	public TokenModel getToken(String authentication) {
-		return null;
+		if (authentication == null || authentication.length() == 0) {
+            return null;
+        }
+        String[] param = authentication.split("_");
+        if (param.length != 2) {
+            return null;
+        }
+        //使用userId和源token简单拼接成的token，可以增加加密措施
+        long userId = Long.parseLong(param[0]);
+        String token = param[1];
+        return new TokenModel(userId, token);
 	}
 
 	@Override
 	public void deleteToken(long userId) {
-		
+		try {
+			redis.del(String.valueOf(userId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 

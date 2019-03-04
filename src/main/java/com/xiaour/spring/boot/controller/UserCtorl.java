@@ -17,11 +17,11 @@ import com.xiaour.spring.boot.utils.JsonUtil;
 
 
 /**
- * Created by xiaour on 2017/4/19.
+ * Created by huwei on 2017/4/19.
  */
 @RestController
-@RequestMapping(value="/test")
-public class TestCtrl {
+@RequestMapping(value="/user")
+public class UserCtorl {
 	
 	@Autowired
 	private RedisService redisService;

@@ -8,7 +8,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.xiaour.spring.boot.interceptor.PassportInterceptor;
+import com.xiaour.spring.boot.interceptor.CurrentUserResolver;
+import com.xiaour.spring.boot.interceptor.TokenInterceptor;
 
 
 /**
@@ -22,12 +23,17 @@ import com.xiaour.spring.boot.interceptor.PassportInterceptor;
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
-    private PassportInterceptor passportInterceptor;
-
+    private TokenInterceptor tokenInterceptor;
+    
+    @Autowired
+    private CurrentUserResolver currentUserResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(passportInterceptor).excludePathPatterns("/register");
+        registry.addInterceptor(tokenInterceptor).excludePathPatterns("/reg");
     }
-
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(currentUserResolver);
+    }
 }

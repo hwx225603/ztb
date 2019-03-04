@@ -7,7 +7,11 @@ public class UserInfo {
 
     private String name;
 
-    private String age;
+    private String userName;
+    
+    private String passWrod;
+    
+    private Date createTime;
 
 	public Integer getId() {
 		return id;
@@ -25,12 +29,28 @@ public class UserInfo {
 		this.name = name;
 	}
 
-	public String getAge() {
-		return age;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setAge(String age) {
-		this.age = age;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
+	public String getPassWrod() {
+		return passWrod;
+	}
+
+	public void setPassWrod(String passWrod) {
+		this.passWrod = passWrod;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+    
 }
