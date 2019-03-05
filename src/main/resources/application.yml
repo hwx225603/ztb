@@ -41,7 +41,7 @@ mybatis:
     
 # 日志输出
 logging: 
-    file: D:/boot.log
+    file: /usr/local/zfb/log.log
     level: 
         com.ibatis:DEBUG
         root:DEBUG

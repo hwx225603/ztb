@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -129,7 +130,7 @@ public class UserCtorl extends BaseController{
      */
 	@noNull(str = "phone")
 	@ApiOperation(value="发短信")
-	@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "path")
+	@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "query")
 	@RequestMapping(value="/code",method = RequestMethod.GET)
 	public ResultModel getCode(String phone) throws Exception{
 		String verifyCode = String

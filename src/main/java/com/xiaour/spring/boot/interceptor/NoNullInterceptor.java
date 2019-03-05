@@ -31,6 +31,9 @@ public class NoNullInterceptor extends HandlerInterceptorAdapter{
 	            String Str = noNullAnnotation.str();
 	            //从httpServletRequest获取注解上指定的参数
 	            Object obj = httpServletRequest.getParameter(Str);
+	            if(null == obj){
+	            	obj = httpServletRequest.getAttribute(Str);
+	            }
 	            if(null != obj){
 	                return true;
 	            }else{
