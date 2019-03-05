@@ -6,4 +6,8 @@ public interface UserInfoService {
 	
 	public UserInfo findById(Integer id);
 	
+	public UserInfo findByPhone(String phone);
+
+	public void updatePassWord(String phone, String newPw);
+	
 }

@@ -12,6 +12,8 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 /**
  * 
  * @ClassName Application

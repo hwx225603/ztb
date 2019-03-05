@@ -6,9 +6,9 @@
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="pass_word" property="passWord" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="status" property=""status"" jdbcType="VARCHAR" />
-    <result column="ident" property=""ident"" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="DATETIME" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="ident" property="ident" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
   
@@ -20,5 +20,7 @@
     select * from user_info where phone = #{phone,jdbcType=VARCHAR}
   </select>
  
-
+  <update id="updatePassWord">
+ 	update user_info set pass_word = #{passWord,jdbcType=VARCHAR} where phone = #{phone,jdbcType=VARCHAR}
+  </update>
 </mapper>

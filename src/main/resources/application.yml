@@ -46,7 +46,4 @@ logging:
         com.ibatis:DEBUG
         root:DEBUG
 
-task:
-    cron:0 0/5 * * * ?
-       
     

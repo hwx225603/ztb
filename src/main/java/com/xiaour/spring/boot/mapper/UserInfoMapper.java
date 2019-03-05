@@ -8,6 +8,8 @@ public interface UserInfoMapper {
 
     UserInfo selectByPrimaryKey(Integer id);
 
-	UserInfo selectByPhone(@Param("userName") String userName);
+	UserInfo selectByPhone(@Param("phone") String phone);
+
+	void updatePassWord(@Param("phone")String phone, @Param("passWord")String passWord);
 
 }
