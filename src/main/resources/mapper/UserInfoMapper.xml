@@ -7,20 +7,186 @@
     <result column="pass_word" property="passWord" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="ident" property="ident" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ident" property="ident" jdbcType="VARCHAR" />
+    <result column="has_verify" property="hasVerify" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="comp_name" property="compName" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="social_code" property="socialCode" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
   </resultMap>
-
-  
+  <sql id="Base_Column_List" >
+    id, phone, pass_word, name, status, create_time, ident, has_verify, type, comp_name, 
+    tel, social_code, url
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select * from user_info where id = #{id,jdbcType=INTEGER}
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where id = #{id,jdbcType=INTEGER}
   </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xiaour.spring.boot.entity.UserInfo" >
+    insert into user_info (id, phone, pass_word, 
+      name, status, create_time, 
+      ident, has_verify, type, 
+      comp_name, tel, social_code, 
+      url)
+    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{ident,jdbcType=VARCHAR}, #{hasVerify,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{compName,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{socialCode,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiaour.spring.boot.entity.UserInfo" >
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="passWord != null" >
+        pass_word,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="ident != null" >
+        ident,
+      </if>
+      <if test="hasVerify != null" >
+        has_verify,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="compName != null" >
+        comp_name,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="socialCode != null" >
+        social_code,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null" >
+        #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ident != null" >
+        #{ident,jdbcType=VARCHAR},
+      </if>
+      <if test="hasVerify != null" >
+        #{hasVerify,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="compName != null" >
+        #{compName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="socialCode != null" >
+        #{socialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiaour.spring.boot.entity.UserInfo" >
+    update user_info
+    <set >
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null" >
+        pass_word = #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ident != null" >
+        ident = #{ident,jdbcType=VARCHAR},
+      </if>
+      <if test="hasVerify != null" >
+        has_verify = #{hasVerify,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="compName != null" >
+        comp_name = #{compName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="socialCode != null" >
+        social_code = #{socialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiaour.spring.boot.entity.UserInfo" >
+    update user_info
+    set phone = #{phone,jdbcType=VARCHAR},
+      pass_word = #{passWord,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      ident = #{ident,jdbcType=VARCHAR},
+      has_verify = #{hasVerify,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      comp_name = #{compName,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      social_code = #{socialCode,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
   
   <select id="selectByPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select * from user_info where phone = #{phone,jdbcType=VARCHAR}
   </select>
- 
-  <update id="updatePassWord">
- 	update user_info set pass_word = #{passWord,jdbcType=VARCHAR} where phone = #{phone,jdbcType=VARCHAR}
-  </update>
 </mapper>

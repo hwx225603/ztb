@@ -5,74 +5,131 @@ import java.util.Date;
 public class UserInfo {
     private Integer id;
 
+    private String phone;
+
+    private String passWord;
+
     private String name;
 
-    private String phone;
-    
-    private String passWord;
-    
-    private String ident;
-    
-    private Date createTime;
-    
     private String status;
 
-	public Integer getId() {
-		return id;
-	}
+    private Date createTime;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    private String ident;
 
-	public String getName() {
-		return name;
-	}
+    private String hasVerify;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String type;
 
-	public String getPassWord() {
-		return passWord;
-	}
+    private String compName;
 
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
-	}
+    private String tel;
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    private String socialCode;
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    private String url;
 
-	public String getPhone() {
-		return phone;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getIdent() {
-		return ident;
-	}
-	
+    public String getPhone() {
+        return phone;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public String getPassWord() {
+        return passWord;
+    }
 
-	public void setIdent(String ident) {
-		this.ident = ident;
-	}
-	
-    
+    public void setPassWord(String passWord) {
+        this.passWord = passWord == null ? null : passWord.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getIdent() {
+        return ident;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident == null ? null : ident.trim();
+    }
+
+    public String getHasVerify() {
+        return hasVerify;
+    }
+
+    public void setHasVerify(String hasVerify) {
+        this.hasVerify = hasVerify == null ? null : hasVerify.trim();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
+    }
+
+    public String getCompName() {
+        return compName;
+    }
+
+    public void setCompName(String compName) {
+        this.compName = compName == null ? null : compName.trim();
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
+    }
+
+    public String getSocialCode() {
+        return socialCode;
+    }
+
+    public void setSocialCode(String socialCode) {
+        this.socialCode = socialCode == null ? null : socialCode.trim();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
+    }
 }

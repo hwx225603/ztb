@@ -4,11 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
  
 <generatorConfiguration>
-    <!--导入属性配置-->
-    <properties resource="datasource.properties"></properties>
  
     <!-- 指定数据库驱动的jdbc驱动jar包的位置 -->
-    <classPathEntry location="${db.driverLocation}" />
+    <classPathEntry location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.41\mysql-connector-java-5.1.41.jar" />
  
     <!-- context 是逆向工程的主要配置信息 -->
     <!-- id：起个名字 -->
@@ -24,7 +22,7 @@
  
         <!--jdbc的数据库连接-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://39.105.192.182:3306/zhi_tui_bao?useUnicode=true&characterEncoding=utf-8"
+                        connectionURL="jdbc:mysql://39.105.192.182:3306/zhi_tui_bao?characterEncoding=utf-8"
                         userId="root"
                         password="root!!2019">
         </jdbcConnection>
@@ -51,7 +49,7 @@
  
         <!-- targetPackage 和 targetProject：生成的 mapper 文件的包和位置 -->
         <sqlMapGenerator targetPackage="mapper"
-                         targetProject=".\src\main\resource">
+                         targetProject=".\src\main\resources">
             <!-- 针对数据库的一个配置，是否把 schema 作为字包名 -->
             <property name="enableSubPackages" value="false" />
         </sqlMapGenerator>
@@ -62,7 +60,7 @@
             <!-- 针对 oracle 数据库的一个配置，是否把 schema 作为字包名 -->
             <property name="enableSubPackages" value="false" />
         </javaClientGenerator>
-        <table tableName="user" domainObjectName="User"
+        <table tableName="user_info" domainObjectName="UserInfo"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

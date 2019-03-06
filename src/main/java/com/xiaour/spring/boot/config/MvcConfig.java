@@ -35,7 +35,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
     	registry.addInterceptor(tokenInterceptor).excludePathPatterns("/**/swagger-resources/**").excludePathPatterns("/**/user/code")
-    	.excludePathPatterns("/**/user/login");
+    	.excludePathPatterns("/**/user/login").excludePathPatterns("/**/user/reg");
     	registry.addInterceptor(noNullInterceptor);
     }
     @Override

@@ -28,19 +28,23 @@ public class NoNullInterceptor extends HandlerInterceptorAdapter{
 	        Method method = handlerMethod.getMethod();
 	        if (method.getAnnotation(noNull.class) != null) {
 	            noNull  noNullAnnotation=method.getAnnotation(noNull.class);
-	            String Str = noNullAnnotation.str();
+	            String str = noNullAnnotation.str();
+	            String[] strs = str.split(",");
 	            //从httpServletRequest获取注解上指定的参数
-	            Object obj = httpServletRequest.getParameter(Str);
-	            if(null == obj){
-	            	obj = httpServletRequest.getAttribute(Str);
+	            if(null != strs && strs.length > 0) {
+	            	for(String s : strs) {
+	            		Object obj = httpServletRequest.getParameter(s );
+	     	            if(null == obj){
+	     	            	obj = httpServletRequest.getAttribute(s );
+	     	            	if(null == obj){
+	     		            	httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");  
+	     		                httpServletResponse.getWriter().write(JSON.toJSONString(new ResultModel(ResultStatus.PARAMS_NULL)));
+	     		                return false;
+	     		            }
+	     	            }
+	            	}
 	            }
-	            if(null != obj){
-	                return true;
-	            }else{
-	            	httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");  
-	                httpServletResponse.getWriter().write(JSON.toJSONString(new ResultModel(ResultStatus.PARAMS_NULL)));
-	                return false;
-	            }
+	            return true;	
 	        }else{
 	            return true;
 	        }

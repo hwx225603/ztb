@@ -23,8 +23,6 @@ import java.util.concurrent.TimeUnit;
 @Transactional(rollbackFor = Exception.class)
 public class RedisServiceImpl implements RedisService {
 
-    private static int seconds=3600*24;
-
     @Autowired
     private RedisTemplate<String, ?> redisTemplate;
 

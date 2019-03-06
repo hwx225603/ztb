@@ -6,12 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,13 +60,14 @@ public class UserCtorl extends BaseController{
 	 * @param password
 	 * @return
 	 */
+	@noNull(str = "phone,password")
 	@ApiOperation(value="登录")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "query"),
 		@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String" ,paramType = "query")
     })
 	@RequestMapping(value="/login",method = RequestMethod.POST)
-	public ResultModel login(@NotBlank(message="用户名不能为空") String phone,@NotBlank(message="密码不能为空")String password) {
+	public ResultModel login(String phone,String password) {
 
 		UserInfo user = userInfoMapper.selectByPhone(phone);
 		if (user == null || // 未注册
@@ -90,6 +86,7 @@ public class UserCtorl extends BaseController{
 	 * @param passWord
 	 * @return
 	 */
+	@noNull(str = "phone,code,passWord")
 	@ApiOperation(value="注册")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "query"),
@@ -97,11 +94,10 @@ public class UserCtorl extends BaseController{
 		@ApiImplicitParam(name = "passWord", value = "密码", required = true, dataType = "String" ,paramType = "query")
     })
 	@RequestMapping(value="/reg",method = RequestMethod.POST)
-	public ResultModel register(@NotBlank(message="手机号不能为空") String phone,@NotBlank(message="验证码不能为空")String code,
-			@NotBlank(message="密码不能为空")String passWord) {
+	public ResultModel register(String phone,String code,String passWord) {
 		//校验验证码
 		try {
-			String codeReal = redisService.get("phone");
+			String codeReal = redisService.get(phone);
 			if(null == codeReal) {
 				return error("请重新发送验证码");	
 			}else if(!codeReal.equals(code)){
@@ -121,13 +117,10 @@ public class UserCtorl extends BaseController{
 		user.setPhone(phone);
 		user.setPassWord(passWord);
 		user.setStatus("1");
+		userInfoMapper.insert(user);
 		return ok();
 	}
-    /**
-                * 短信发送
-     * @param phone
-     * @return
-     */
+  
 	@noNull(str = "phone")
 	@ApiOperation(value="发短信")
 	@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "query")
@@ -155,6 +148,7 @@ public class UserCtorl extends BaseController{
 		return ok();
 	}
 	
+	@noNull(str = "oldPw,newPw,newPw2")
 	@ApiOperation(value="修改密码")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "oldPw", value = "原始密码", required = true, dataType = "String",paramType = "query"),
@@ -162,8 +156,7 @@ public class UserCtorl extends BaseController{
 		@ApiImplicitParam(name = "newPw2", value = "再次新密码", required = true, dataType = "String" ,paramType = "query")
     })
 	@RequestMapping(value="/modifyPass",method = RequestMethod.POST)
-	public ResultModel modifyPassWord(@CurrentUser UserInfo userInfo,@NotBlank(message="原始密码不能为空") String oldPw,
-			@NotBlank(message="新密码不能为空") String newPw,String newPw2) throws Exception{
+	public ResultModel modifyPassWord(@CurrentUser UserInfo userInfo,String oldPw,String newPw,String newPw2) throws Exception{
 		if(newPw.equals(newPw2)) {
 			String phone = userInfo.getPhone();
 			UserInfo user = userInfoService.findByPhone(phone);
@@ -180,5 +173,11 @@ public class UserCtorl extends BaseController{
 			return error("两次密码不一致");
 		}
 		return ok();
+	}
+	
+	@ApiOperation(value="用户信息获取")
+	@RequestMapping(value="/info",method = RequestMethod.GET)
+	public ResultModel getUser(@CurrentUser UserInfo userInfo) throws Exception{
+		return ok(userInfo);
 	}
 }

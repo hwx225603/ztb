@@ -10,7 +10,7 @@ public enum ResultStatus {
     USERNAME_OR_PASSWORD_ERROR(-1001, "用户名或密码错误"),
     USER_NOT_FOUND(-1002, "用户不存在"),
     USER_NOT_LOGIN(-1003, "用户未登录"),
-    PARAMS_NULL(-1005, "参数不能为空"),
+    PARAMS_NULL(-1005, "参数异常"),
     USER_HAS_REG(-1004, "用户已注册");
 
     /**
