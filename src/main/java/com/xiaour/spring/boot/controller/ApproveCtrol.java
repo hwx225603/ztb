@@ -39,7 +39,7 @@ public class ApproveCtrol extends BaseController{
 		return ok();
 	}
 	
-	@ApiOperation(value="待审核列表")
+	@ApiOperation(value="待审核详情")
 	@GetMapping("/detail")
 	public ResultModel getDetail(Integer id) throws Exception{
 		UserInfo data = approveService.getDetail(id);
