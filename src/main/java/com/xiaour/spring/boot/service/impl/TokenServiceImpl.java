@@ -18,7 +18,7 @@ public class TokenServiceImpl implements TokenService{
 	private RedisService redis;
 
 	@Override
-	public TokenModel createToken(long userId) {
+	public TokenModel createToken(Integer userId) {
 		 //使用uuid作为源token
         String token = UUID.randomUUID().toString().replace("-", "");
         TokenModel model = new TokenModel(userId, token);
@@ -56,13 +56,13 @@ public class TokenServiceImpl implements TokenService{
             return null;
         }
         //使用userId和源token简单拼接成的token，可以增加加密措施
-        long userId = Long.parseLong(param[0]);
+        Integer userId = Integer.parseInt(param[0]);
         String token = param[1];
         return new TokenModel(userId, token);
 	}
 
 	@Override
-	public void deleteToken(long userId) {
+	public void deleteToken(Integer userId) {
 		try {
 			redis.del(String.valueOf(userId));
 		} catch (Exception e) {

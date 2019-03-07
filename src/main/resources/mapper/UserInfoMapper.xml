@@ -15,6 +15,8 @@
     <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="social_code" property="socialCode" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="ident_pc1" property="identPc1" jdbcType="VARCHAR" />
+    <result column="ident_pc2" property="identPc2" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, phone, pass_word, name, status, create_time, ident, has_verify, type, comp_name, 
@@ -32,13 +34,12 @@
   </delete>
   <insert id="insert" parameterType="com.xiaour.spring.boot.entity.UserInfo" >
     insert into user_info (id, phone, pass_word, 
-      name, status, create_time, 
-      ident, has_verify, type, 
+      name, ident, type, 
       comp_name, tel, social_code, 
       url)
     values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{ident,jdbcType=VARCHAR}, #{hasVerify,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, 
+      #{ident,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
       #{compName,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{socialCode,jdbcType=VARCHAR}, 
       #{url,jdbcType=VARCHAR})
   </insert>
@@ -166,6 +167,12 @@
       <if test="url != null" >
         url = #{url,jdbcType=VARCHAR},
       </if>
+      <if test="identPc1 != null" >
+        ident_pc1 = #{identPc1,jdbcType=VARCHAR},
+      </if>
+      <if test="identPc2 != null" >
+        ident_pc2 = #{identPc2,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -188,5 +195,16 @@
   
   <select id="selectByPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select * from user_info where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updatePassWord">
+     update user_info set pass_word = #{passWord,jdbcType=VARCHAR} where phone = #{phone,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where has_verify = '1';
   </select>
 </mapper>

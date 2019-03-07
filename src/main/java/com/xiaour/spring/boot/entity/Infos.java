@@ -11,7 +11,9 @@ public class Infos {
 
     private String postion;
 
-    private Date createtime;
+    private Date createTime;
+    
+    private String time;
 
     private String type;
 
@@ -49,15 +51,15 @@ public class Infos {
         this.postion = postion == null ? null : postion.trim();
     }
 
-    public Date getCreatetime() {
-        return createtime;
-    }
+    public Date getCreateTime() {
+		return createTime;
+	}
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public String getType() {
+	public String getType() {
         return type;
     }
 
@@ -72,4 +74,13 @@ public class Infos {
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
     }
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+    
 }

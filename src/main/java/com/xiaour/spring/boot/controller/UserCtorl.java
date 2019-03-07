@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xiaour.spring.boot.config.BaseController;
@@ -17,13 +18,14 @@ import com.xiaour.spring.boot.config.CurrentUser;
 import com.xiaour.spring.boot.config.ResultModel;
 import com.xiaour.spring.boot.config.ResultStatus;
 import com.xiaour.spring.boot.config.TokenModel;
-import com.xiaour.spring.boot.config.noNull;
 import com.xiaour.spring.boot.entity.UserInfo;
 import com.xiaour.spring.boot.mapper.UserInfoMapper;
 import com.xiaour.spring.boot.service.RedisService;
 import com.xiaour.spring.boot.service.TokenService;
 import com.xiaour.spring.boot.service.UserInfoService;
+import com.xiaour.spring.boot.vo.req.UserVerifyReq;
 
+import cn.jiguang.common.utils.StringUtils;
 import cn.jsms.api.SendSMSResult;
 import cn.jsms.api.common.SMSClient;
 import cn.jsms.api.common.model.SMSPayload;
@@ -31,7 +33,11 @@ import cn.jsms.api.common.model.SMSPayload.Builder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 /**
@@ -60,7 +66,6 @@ public class UserCtorl extends BaseController{
 	 * @param password
 	 * @return
 	 */
-	@noNull(str = "phone,password")
 	@ApiOperation(value="登录")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "query"),
@@ -68,7 +73,9 @@ public class UserCtorl extends BaseController{
     })
 	@RequestMapping(value="/login",method = RequestMethod.POST)
 	public ResultModel login(String phone,String password) {
-
+		if(StringUtils.isEmpty(phone)) {
+			return error(ResultStatus.PARAMS_NULL);
+		}
 		UserInfo user = userInfoMapper.selectByPhone(phone);
 		if (user == null || // 未注册
 				!user.getPassWord().equals(password)) { // 密码错误
@@ -86,7 +93,6 @@ public class UserCtorl extends BaseController{
 	 * @param passWord
 	 * @return
 	 */
-	@noNull(str = "phone,code,passWord")
 	@ApiOperation(value="注册")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "query"),
@@ -121,7 +127,6 @@ public class UserCtorl extends BaseController{
 		return ok();
 	}
   
-	@noNull(str = "phone")
 	@ApiOperation(value="发短信")
 	@ApiImplicitParam(name = "phone", value = "手机", required = true, dataType = "String",paramType = "query")
 	@RequestMapping(value="/code",method = RequestMethod.GET)
@@ -148,7 +153,6 @@ public class UserCtorl extends BaseController{
 		return ok();
 	}
 	
-	@noNull(str = "oldPw,newPw,newPw2")
 	@ApiOperation(value="修改密码")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "oldPw", value = "原始密码", required = true, dataType = "String",paramType = "query"),
@@ -156,7 +160,7 @@ public class UserCtorl extends BaseController{
 		@ApiImplicitParam(name = "newPw2", value = "再次新密码", required = true, dataType = "String" ,paramType = "query")
     })
 	@RequestMapping(value="/modifyPass",method = RequestMethod.POST)
-	public ResultModel modifyPassWord(@CurrentUser UserInfo userInfo,String oldPw,String newPw,String newPw2) throws Exception{
+	public ResultModel modifyPassWord(@ApiIgnore @CurrentUser UserInfo userInfo,String oldPw,String newPw,String newPw2) throws Exception{
 		if(newPw.equals(newPw2)) {
 			String phone = userInfo.getPhone();
 			UserInfo user = userInfoService.findByPhone(phone);
@@ -175,9 +179,53 @@ public class UserCtorl extends BaseController{
 		return ok();
 	}
 	
+	
+	@ApiOperation(value="重置密码")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "phone", value = "手机号", required = true, dataType = "String",paramType = "query"),
+		@ApiImplicitParam(name = "code", value = "验证码", required = true, dataType = "String" ,paramType = "query"),
+		@ApiImplicitParam(name = "newPw", value = "新密码", required = true, dataType = "String" ,paramType = "query")
+    })
+	@RequestMapping(value="/reSetPass",method = RequestMethod.POST)
+	public ResultModel reSetPassWord(String phone,String code,String newPw) throws Exception{
+		try {
+			String codeReal = redisService.get(phone);
+			if(null == codeReal) {
+				return error("请重新发送验证码");	
+			}else if(!codeReal.equals(code)){
+				return error("验证码错误");	
+			}else{
+				//判断是否注册
+				UserInfo user = userInfoMapper.selectByPhone(phone);
+				if(null == user) {
+					return error(ResultStatus.USER_NO_REG);	
+				}else {
+					userInfoMapper.updatePassWord(phone,newPw);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ok();
+	}
+	
 	@ApiOperation(value="用户信息获取")
 	@RequestMapping(value="/info",method = RequestMethod.GET)
-	public ResultModel getUser(@CurrentUser UserInfo userInfo) throws Exception{
+	public ResultModel getUser(@ApiIgnore @CurrentUser UserInfo userInfo) throws Exception{
 		return ok(userInfo);
+	}
+	
+	@ApiOperation(value="登出")
+	@RequestMapping(value="/out",method = RequestMethod.POST)
+	public ResultModel out(@ApiIgnore @CurrentUser  UserInfo userInfo) throws Exception{
+		tokenService.deleteToken(userInfo.getId());
+		return ok(userInfo);
+	}
+	
+	@ApiOperation(value="认证")
+	@RequestMapping(value="/verify",method = RequestMethod.POST)
+	public ResultModel verify(@ApiIgnore @CurrentUser  UserInfo userInfo,UserVerifyReq req) throws Exception{
+		userInfoService.verify(userInfo.getId(),req);
+		return ok();
 	}
 }

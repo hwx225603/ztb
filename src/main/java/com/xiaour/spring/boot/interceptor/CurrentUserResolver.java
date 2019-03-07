@@ -40,10 +40,12 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         //取出鉴权时存入的登录用户Id
-        Integer currentUserId = (Integer) webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST);
+    	Integer currentUserId = (Integer) webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST);
         if (currentUserId != null) {
             //从数据库中查询并返回
-            return userService.findById(currentUserId);
+        	UserInfo user = userService.findById(currentUserId);
+        	user.setPassWord(null);
+            return user;
         }
         throw new MissingServletRequestPartException(Constants.CURRENT_USER_ID);
     }

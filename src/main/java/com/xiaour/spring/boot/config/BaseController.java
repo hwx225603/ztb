@@ -1,5 +1,7 @@
 package com.xiaour.spring.boot.config;
 
+import com.xiaour.spring.boot.entity.UserInfo;
+
 public class BaseController {
 	
     public ResultModel ok(Object content) {
@@ -16,5 +18,5 @@ public class BaseController {
     public ResultModel error(String msg) {
         return new ResultModel(-1000,msg);
     }
-    
+
 }

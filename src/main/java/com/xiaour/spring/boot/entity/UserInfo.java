@@ -14,7 +14,7 @@ public class UserInfo {
     private String status;
 
     private Date createTime;
-
+    
     private String ident;
 
     private String hasVerify;
@@ -28,8 +28,29 @@ public class UserInfo {
     private String socialCode;
 
     private String url;
+    
+    private String identPc1;
+    
+    private String identPc2;
+    
 
-    public Integer getId() {
+    public String getIdentPc1() {
+		return identPc1;
+	}
+
+	public void setIdentPc1(String identPc1) {
+		this.identPc1 = identPc1;
+	}
+
+	public String getIdentPc2() {
+		return identPc2;
+	}
+
+	public void setIdentPc2(String identPc2) {
+		this.identPc2 = identPc2;
+	}
+
+	public Integer getId() {
         return id;
     }
 

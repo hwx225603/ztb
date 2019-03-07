@@ -6,14 +6,14 @@
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="publiser" property="publiser" jdbcType="VARCHAR" />
     <result column="postion" property="postion" jdbcType="VARCHAR" />
-    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="type" property="type" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.xiaour.spring.boot.entity.Infos" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, title, publiser, postion, createTime, type
+    id, title, publiser, postion, create_time, type
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -32,10 +32,10 @@
   </delete>
   <insert id="insert" parameterType="com.xiaour.spring.boot.entity.Infos" >
     insert into infos (id, title, publiser, 
-      postion, createTime, type, 
+      postion, create_time, type, 
       content)
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{publiser,jdbcType=VARCHAR}, 
-      #{postion,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{type,jdbcType=VARCHAR}, 
+      #{postion,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{type,jdbcType=VARCHAR}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.xiaour.spring.boot.entity.Infos" >
@@ -53,8 +53,8 @@
       <if test="postion != null" >
         postion,
       </if>
-      <if test="createtime != null" >
-        createTime,
+      <if test="create_time != null" >
+        create_time,
       </if>
       <if test="type != null" >
         type,
@@ -76,8 +76,8 @@
       <if test="postion != null" >
         #{postion,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null" >
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="create_time != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="type != null" >
         #{type,jdbcType=VARCHAR},
@@ -99,8 +99,8 @@
       <if test="postion != null" >
         postion = #{postion,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null" >
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="create_time != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=VARCHAR},
@@ -116,7 +116,7 @@
     set title = #{title,jdbcType=VARCHAR},
       publiser = #{publiser,jdbcType=VARCHAR},
       postion = #{postion,jdbcType=VARCHAR},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       type = #{type,jdbcType=VARCHAR},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
@@ -126,7 +126,7 @@
     set title = #{title,jdbcType=VARCHAR},
       publiser = #{publiser,jdbcType=VARCHAR},
       postion = #{postion,jdbcType=VARCHAR},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       type = #{type,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -135,6 +135,6 @@
     select 
     <include refid="Base_Column_List" />
     from infos
-    where type = #{type,jdbcType=VARCHAR}
+    where type = #{type,jdbcType=VARCHAR} order by create_time DESC
   </select>
 </mapper>

@@ -8,21 +8,21 @@ package com.xiaour.spring.boot.config;
 public class TokenModel {
 
     //用户id
-    private long userId;
+    private Integer userId;
 
     //随机生成的uuid
     private String token;
 
-    public TokenModel(long userId, String token) {
+    public TokenModel(Integer userId, String token) {
         this.userId = userId;
         this.token = token;
     }
 
-    public long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

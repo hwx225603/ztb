@@ -1,5 +1,7 @@
 package com.xiaour.spring.boot.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.xiaour.spring.boot.entity.UserInfo;
@@ -20,4 +22,6 @@ public interface UserInfoMapper {
     UserInfo selectByPhone(@Param("phone") String phone);
 
 	void updatePassWord(@Param("phone")String phone, @Param("passWord")String passWord);
+
+	List<UserInfo> getList();
 }
