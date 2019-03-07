@@ -21,6 +21,10 @@ import com.xiaour.spring.boot.interceptor.TokenInterceptor;
  */
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
+	
+	String [] path = new String[] {"/**/swagger-resources/**","/**/user/code",
+			"/**/user/login","/**/user/reg","/**/user/reSetPass","/**/img/upload",
+			"/**/index/**"};
 
     @Autowired
     private TokenInterceptor tokenInterceptor;
@@ -30,9 +34,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-    	registry.addInterceptor(tokenInterceptor).excludePathPatterns("/**/swagger-resources/**").excludePathPatterns("/**/user/code")
-    	.excludePathPatterns("/**/user/login").excludePathPatterns("/**/user/reg")
-    	.excludePathPatterns("/**/user/reSetPass").excludePathPatterns("/**/img/upload");
+    	registry.addInterceptor(tokenInterceptor).excludePathPatterns(path);
     }
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
