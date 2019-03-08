@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,13 +20,17 @@ import com.xiaour.spring.boot.config.CurrentUser;
 import com.xiaour.spring.boot.config.ResultModel;
 import com.xiaour.spring.boot.config.ResultStatus;
 import com.xiaour.spring.boot.config.TokenModel;
+import com.xiaour.spring.boot.config.VerifyEnum;
+import com.xiaour.spring.boot.entity.Infos;
 import com.xiaour.spring.boot.entity.SmsCode;
 import com.xiaour.spring.boot.entity.UserInfo;
+import com.xiaour.spring.boot.mapper.InfosMapper;
 import com.xiaour.spring.boot.mapper.SmsCodeMapper;
 import com.xiaour.spring.boot.mapper.UserInfoMapper;
 import com.xiaour.spring.boot.service.TokenService;
 import com.xiaour.spring.boot.service.UserInfoService;
 import com.xiaour.spring.boot.utils.DateUtil;
+import com.xiaour.spring.boot.vo.req.InfosReq;
 import com.xiaour.spring.boot.vo.req.UserVerifyReq;
 
 import cn.jiguang.common.utils.StringUtils;
@@ -62,6 +67,9 @@ public class UserCtorl extends BaseController{
 	
 	@Autowired
 	private SmsCodeMapper smsCodeMapper;
+	
+	@Autowired
+	private InfosMapper mapper;
 
     /**
 	 * 登录
@@ -241,6 +249,29 @@ public class UserCtorl extends BaseController{
 	@RequestMapping(value="/verify",method = RequestMethod.POST)
 	public ResultModel verify(@ApiIgnore @CurrentUser  UserInfo userInfo,UserVerifyReq req) throws Exception{
 		userInfoService.verify(userInfo.getId(),req);
+		return ok();
+	}
+	
+	@ApiOperation(value="发布需求")
+	@PostMapping("/pub")
+	public ResultModel pub(@ApiIgnore @CurrentUser UserInfo userInfo,InfosReq req) {
+		if(!VerifyEnum.YES.getCode().equals(userInfo.getHasVerify())) {
+			return error("请先进行用户认证");
+		}
+		Infos infos = new Infos();
+		infos.setTitle(req.getTitle());
+		infos.setContent(req.getContent());
+		infos.setType(req.getType());
+		if("1".equals(userInfo.getType())) {//个人
+			if(null != userInfo.getName() && userInfo.getName().length() >= 2) {
+				infos.setPubliser(userInfo.getName().substring(0,1)+"*");
+			}else {
+				infos.setPubliser(userInfo.getName());
+			}
+		}else {
+			infos.setPubliser(userInfo.getCompName());
+		}
+		mapper.insertSelective(infos);
 		return ok();
 	}
 }

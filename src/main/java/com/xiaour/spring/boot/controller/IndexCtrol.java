@@ -42,9 +42,6 @@ public class IndexCtrol extends BaseController{
 	@Autowired
 	private InfosServicee infosService;
 	
-	@Autowired
-	private InfosMapper mapper;
-	
 	@ApiOperation(value="banner获取")
 	@RequestMapping(value="/banner",method = RequestMethod.GET)
 	public ResultModel getBanners() {
@@ -74,27 +71,5 @@ public class IndexCtrol extends BaseController{
 		return ok(info);
 	}
 	
-	@ApiOperation(value="发布需求")
-	@PostMapping("/pub")
-	public ResultModel pub(@ApiIgnore @CurrentUser UserInfo userInfo,InfosReq req) {
-		if(!VerifyEnum.YES.getCode().equals(userInfo.getHasVerify())) {
-			return error("请先进行用户认证");
-		}
-		Infos infos = new Infos();
-		infos.setTitle(req.getTitle());
-		infos.setContent(req.getContent());
-		infos.setType(req.getType());
-		if("1".equals(userInfo.getType())) {//个人
-			if(null != userInfo.getName() && userInfo.getName().length() >= 2) {
-				infos.setPubliser(userInfo.getName().substring(0,1)+"*");
-			}else {
-				infos.setPubliser(userInfo.getName());
-			}
-		}else {
-			infos.setPubliser(userInfo.getCompName());
-		}
-		mapper.insertSelective(infos);
-		return ok();
-	}
 	
 }
