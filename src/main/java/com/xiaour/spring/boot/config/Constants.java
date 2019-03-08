@@ -34,4 +34,10 @@ public class Constants {
   //极光短信AppKey
     public static final String APPKEY = "a492e8d9e2ab14f4c91eb752";
 
+    public static final String TITLE = "认证通知";
+    
+    public static final String VERIFY_NO = "您的认证审核未通过!";
+    
+    public static final String VERIFY_YES = "您的认证审核已通过!";
+
 }

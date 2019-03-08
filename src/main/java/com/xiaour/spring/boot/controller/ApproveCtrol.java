@@ -1,5 +1,6 @@
 package com.xiaour.spring.boot.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xiaour.spring.boot.config.BaseController;
+import com.xiaour.spring.boot.config.Constants;
 import com.xiaour.spring.boot.config.CurrentUser;
 import com.xiaour.spring.boot.config.ResultModel;
+import com.xiaour.spring.boot.config.VerifyEnum;
+import com.xiaour.spring.boot.entity.Message;
 import com.xiaour.spring.boot.entity.UserInfo;
+import com.xiaour.spring.boot.mapper.MessageMapper;
 import com.xiaour.spring.boot.service.ApproveService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -23,6 +29,9 @@ public class ApproveCtrol extends BaseController{
 	
 	@Autowired
 	private ApproveService approveService;
+	
+	@Autowired
+	private MessageMapper messageMapper;
 	
 	
 	@ApiOperation(value="待审核列表")
@@ -34,8 +43,21 @@ public class ApproveCtrol extends BaseController{
 	
 	@ApiOperation(value="审核")
 	@GetMapping("/put")
+	@ApiImplicitParam(name = "verify", value = "2-通过 3-不通过", required = true, dataType = "String",paramType = "query")
 	public ResultModel putReult(Integer id,String verify) throws Exception{
 		approveService.putReult(id,verify);
+		//审核成功或者不成功发送消息
+		Message message = new Message();
+		message.setTitile(Constants.TITLE);
+		message.setUserId(id);
+		message.setRead("0");
+		message.setCreateTime(new Date());
+		if(VerifyEnum.YES.getCode().equals(verify)) {
+			message.setContent(Constants.VERIFY_YES);
+		}else {
+			message.setContent(Constants.VERIFY_NO);
+		}
+		messageMapper.insertSelective(message);
 		return ok();
 	}
 	

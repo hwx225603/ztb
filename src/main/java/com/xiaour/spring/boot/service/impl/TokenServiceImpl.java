@@ -1,32 +1,43 @@
 package com.xiaour.spring.boot.service.impl;
 
+import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaour.spring.boot.config.Constants;
 import com.xiaour.spring.boot.config.TokenModel;
-import com.xiaour.spring.boot.service.RedisService;
+import com.xiaour.spring.boot.entity.Token;
+import com.xiaour.spring.boot.mapper.TokenMapper;
 import com.xiaour.spring.boot.service.TokenService;
+import com.xiaour.spring.boot.utils.DateUtil;
 
 @Service
 public class TokenServiceImpl implements TokenService{
 	
 	@Autowired
-	private RedisService redis;
+	private TokenMapper mapper;
 
 	@Override
 	public TokenModel createToken(Integer userId) {
 		 //使用uuid作为源token
         String token = UUID.randomUUID().toString().replace("-", "");
         TokenModel model = new TokenModel(userId, token);
-        //存储到redis并设置过期时间
         try {
-        	redis.set(String.valueOf(userId), token);
-			redis.expire(String.valueOf(userId), Constants.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
-		} catch (Exception e) {
+        	Token tk = mapper.seletByUserId(model.getUserId());
+        	if(null != tk) {
+        		tk.setToken(token);
+        		tk.setEndTime(DateUtil.addDateDay(Constants.TOKEN_EXPIRES_HOUR));
+        		mapper.updateByPrimaryKeySelective(tk);	
+        	}else {
+        		tk = new Token();
+            	tk.setUserId(userId);
+            	tk.setToken(token);
+            	tk.setEndTime(DateUtil.addDateDay(Constants.TOKEN_EXPIRES_HOUR));
+            	mapper.insert(tk);
+        	}
+        } catch (Exception e) {
 			e.printStackTrace();
 		}
         return model;
@@ -37,12 +48,14 @@ public class TokenServiceImpl implements TokenService{
 		 if (model == null) {
 	            return false;
 	        }
-	        String token = redis.get(String.valueOf(model.getUserId()));
-	        if (token == null || !token.equals(model.getToken())) {
+		 	Token token = mapper.seletByUserId(model.getUserId());
+		 	if (token == null || !token.getToken().equals(model.getToken())
+		 		|| token.getEndTime().before(new Date())) {
 	            return false;
 	        }
 	        //如果验证成功，说明此用户进行了一次有效操作，延长token的过期时间
-	        redis.expire(String.valueOf(model.getUserId()), Constants.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
+	        token.setEndTime(DateUtil.addDateMinut(Constants.TOKEN_EXPIRES_HOUR));
+	        mapper.updateByPrimaryKeySelective(token);
 	        return true;
 	}
 
@@ -64,7 +77,7 @@ public class TokenServiceImpl implements TokenService{
 	@Override
 	public void deleteToken(Integer userId) {
 		try {
-			redis.del(String.valueOf(userId));
+			mapper.deleteByUserId(userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

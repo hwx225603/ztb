@@ -2,6 +2,7 @@ package com.xiaour.spring.boot.controller;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -18,11 +19,13 @@ import com.xiaour.spring.boot.config.CurrentUser;
 import com.xiaour.spring.boot.config.ResultModel;
 import com.xiaour.spring.boot.config.ResultStatus;
 import com.xiaour.spring.boot.config.TokenModel;
+import com.xiaour.spring.boot.entity.SmsCode;
 import com.xiaour.spring.boot.entity.UserInfo;
+import com.xiaour.spring.boot.mapper.SmsCodeMapper;
 import com.xiaour.spring.boot.mapper.UserInfoMapper;
-import com.xiaour.spring.boot.service.RedisService;
 import com.xiaour.spring.boot.service.TokenService;
 import com.xiaour.spring.boot.service.UserInfoService;
+import com.xiaour.spring.boot.utils.DateUtil;
 import com.xiaour.spring.boot.vo.req.UserVerifyReq;
 
 import cn.jiguang.common.utils.StringUtils;
@@ -48,9 +51,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(description="用户管理")
 public class UserCtorl extends BaseController{
 	
-	@Autowired
-	private RedisService redisService;
-	
 	@Autowired  
     private UserInfoMapper userInfoMapper;  
 	
@@ -59,6 +59,9 @@ public class UserCtorl extends BaseController{
 	
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private SmsCodeMapper smsCodeMapper;
 
     /**
 	 * 登录
@@ -103,10 +106,10 @@ public class UserCtorl extends BaseController{
 	public ResultModel register(String phone,String code,String passWord) {
 		//校验验证码
 		try {
-			String codeReal = redisService.get(phone);
-			if(null == codeReal) {
+			List<SmsCode> smss = smsCodeMapper.selectByPhone(phone);
+			if(null == smss || smss.size() == 0) {
 				return error("请重新发送验证码");	
-			}else if(!codeReal.equals(code)){
+			}else if(!code.equals(smss.get(0).getCode())){
 				return error("验证码错误");	
 			}else{
 				//判断是否注册
@@ -143,10 +146,22 @@ public class UserCtorl extends BaseController{
 		b.setTempPara(params);
 		SendSMSResult result = sms.sendTemplateSMS(b.build());
 		if(200 == result.getResponseCode()) {
-			//发送成功 存入Redis 5分钟
-			redisService.set(phone, verifyCode);
-			redisService.expire(phone, Constants.CODE_EXPIRES_MINU, TimeUnit.MINUTES);
-			
+			//发送成功 存入数据库 5分钟
+			List<SmsCode> smss = smsCodeMapper.selectByPhone(phone);
+			if(null != smss && smss.size() > 0) {
+				//更新
+				SmsCode smsCode = smss.get(0);
+				smsCode.setCode(verifyCode);
+				smsCode.setEndTime(DateUtil.addDateMinut(Constants.CODE_EXPIRES_MINU));
+				smsCodeMapper.updateByPrimaryKeySelective(smsCode);
+			}else {
+				//更新
+				SmsCode smsCode = new SmsCode();
+				smsCode.setPhone(phone);
+				smsCode.setCode(verifyCode);
+				smsCode.setEndTime(DateUtil.addDateMinut(Constants.CODE_EXPIRES_MINU));
+				smsCodeMapper.insert(smsCode);
+			}
 		}else{
 			return error("短信发送失败，请重试");
 		}
@@ -189,10 +204,10 @@ public class UserCtorl extends BaseController{
 	@RequestMapping(value="/reSetPass",method = RequestMethod.POST)
 	public ResultModel reSetPassWord(String phone,String code,String newPw) throws Exception{
 		try {
-			String codeReal = redisService.get(phone);
-			if(null == codeReal) {
+			List<SmsCode> smss = smsCodeMapper.selectByPhone(phone);
+			if(null == smss || smss.size() == 0) {
 				return error("请重新发送验证码");	
-			}else if(!codeReal.equals(code)){
+			}else if(!code.equals(smss.get(0).getCode())){
 				return error("验证码错误");	
 			}else{
 				//判断是否注册
