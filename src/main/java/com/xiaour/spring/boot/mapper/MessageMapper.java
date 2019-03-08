@@ -2,6 +2,8 @@ package com.xiaour.spring.boot.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.xiaour.spring.boot.entity.Message;
 
 public interface MessageMapper {
@@ -19,7 +21,7 @@ public interface MessageMapper {
 
     int updateByPrimaryKey(Message record);
 
-	List<Message> selectNoRead(Integer userId);
+	List<Message> selectNoRead(@Param("userId")Integer userId);
 
-	List<Message> selectByUserId(Integer userId);
+	List<Message> selectByUserId(@Param("userId")Integer userId);
 }
