@@ -262,6 +262,7 @@ public class UserCtorl extends BaseController{
 		infos.setTitle(req.getTitle());
 		infos.setContent(req.getContent());
 		infos.setType(req.getType());
+		infos.setPhone(userInfo.getPhone());
 		if("1".equals(userInfo.getType())) {//个人
 			if(null != userInfo.getName() && userInfo.getName().length() >= 2) {
 				infos.setPubliser(userInfo.getName().substring(0,1)+"*");

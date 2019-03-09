@@ -37,7 +37,7 @@ public class MessageCtrol extends BaseController{
 	public ResultModel newMsg(@ApiIgnore @CurrentUser UserInfo userInfo) {
 		List<Message> msgs = mapper.selectNoRead(userInfo.getId());
 		Map<String,Boolean> resp = new HashMap<String, Boolean>();
-		if(null != msgs) {
+		if(null != msgs && msgs.size() > 0) {
 			resp.put("new",true);
 		}else {
 			resp.put("new",false);
@@ -70,7 +70,7 @@ public class MessageCtrol extends BaseController{
 	public ResultModel putRead(Integer id) {
 		Message msg = new Message();
 		msg.setId(id);
-		msg.setRead("1");
+		msg.setRd("1");
 		mapper.updateByPrimaryKeySelective(msg);
 		return ok();
 	}

@@ -4,18 +4,18 @@
   <resultMap id="BaseResultMap" type="com.xiaour.spring.boot.entity.Message" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="titile" property="titile" jdbcType="VARCHAR" />
-    <result column="read" property="read" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="rd" property="rd" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.xiaour.spring.boot.entity.Message" extends="BaseResultMap" >
-    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="context" property="context" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, titile, read, create_time
+    id, user_id, title, rd, create_time
   </sql>
   <sql id="Blob_Column_List" >
-    content
+    context
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
@@ -30,11 +30,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.xiaour.spring.boot.entity.Message" >
-    insert into message (id, user_id, titile, 
-      read, create_time, content
+    insert into message (id, user_id, title, 
+      rd, create_time, context
       )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{titile,jdbcType=VARCHAR}, 
-      #{read,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{rd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{context,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.xiaour.spring.boot.entity.Message" >
@@ -46,17 +46,17 @@
       <if test="userId != null" >
         user_id,
       </if>
-      <if test="titile != null" >
-        titile,
+      <if test="title != null" >
+        title,
       </if>
-      <if test="read != null" >
-        read,
+      <if test="rd != null" >
+        rd,
       </if>
       <if test="createTime != null" >
         create_time,
       </if>
-      <if test="content != null" >
-        content,
+      <if test="context != null" >
+        context,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -66,17 +66,17 @@
       <if test="userId != null" >
         #{userId,jdbcType=INTEGER},
       </if>
-      <if test="titile != null" >
-        #{titile,jdbcType=VARCHAR},
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
       </if>
-      <if test="read != null" >
-        #{read,jdbcType=VARCHAR},
+      <if test="rd != null" >
+        #{rd,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="content != null" >
-        #{content,jdbcType=LONGVARCHAR},
+      <if test="context != null" >
+        #{context,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -86,17 +86,17 @@
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="titile != null" >
-        titile = #{titile,jdbcType=VARCHAR},
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="read != null" >
-        read = #{read,jdbcType=VARCHAR},
+      <if test="rd != null" >
+        rd = #{rd,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=LONGVARCHAR},
+      <if test="context != null" >
+        context = #{context,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -104,35 +104,30 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xiaour.spring.boot.entity.Message" >
     update message
     set user_id = #{userId,jdbcType=INTEGER},
-      titile = #{titile,jdbcType=VARCHAR},
-      read = #{read,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      rd = #{rd,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARCHAR}
+      context = #{context,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xiaour.spring.boot.entity.Message" >
     update message
     set user_id = #{userId,jdbcType=INTEGER},
-      titile = #{titile,jdbcType=VARCHAR},
-      read = #{read,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      rd = #{rd,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   
-   <select id="selectNoRead" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from message
-    where user_id = #{userId,jdbcType=INTEGER} and read = '0'
+  <select id="selectNoRead" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select <include refid="Base_Column_List" />
+     from message
+    where user_id = #{userId,jdbcType=INTEGER} and rd = '0'
   </select>
   
-   <select id="selectByUserId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+   <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from message
     where user_id = #{userId,jdbcType=INTEGER}
   </select>

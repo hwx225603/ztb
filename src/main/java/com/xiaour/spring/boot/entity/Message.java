@@ -7,15 +7,15 @@ public class Message {
 
     private Integer userId;
 
-    private String titile;
+    private String title;
 
-    private String read;
+    private String rd;
 
     private Date createTime;
     
     private String time;
 
-    private String content;
+    private String context;
 
     public Integer getId() {
         return id;
@@ -33,23 +33,23 @@ public class Message {
         this.userId = userId;
     }
 
-    public String getTitile() {
-        return titile;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitile(String titile) {
-        this.titile = titile == null ? null : titile.trim();
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
-    public String getRead() {
-        return read;
-    }
+    public String getRd() {
+		return rd;
+	}
 
-    public void setRead(String read) {
-        this.read = read == null ? null : read.trim();
-    }
+	public void setRd(String rd) {
+		this.rd = rd;
+	}
 
-    public Date getCreateTime() {
+	public Date getCreateTime() {
         return createTime;
     }
 
@@ -57,12 +57,12 @@ public class Message {
         this.createTime = createTime;
     }
 
-    public String getContent() {
-        return content;
+    public String getContext() {
+        return context;
     }
 
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+    public void setContext(String context) {
+        this.context = context == null ? null : context.trim();
     }
 
 	public String getTime() {

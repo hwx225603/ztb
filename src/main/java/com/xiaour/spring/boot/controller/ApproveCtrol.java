@@ -48,14 +48,14 @@ public class ApproveCtrol extends BaseController{
 		approveService.putReult(id,verify);
 		//审核成功或者不成功发送消息
 		Message message = new Message();
-		message.setTitile(Constants.TITLE);
+		message.setTitle(Constants.TITLE);
 		message.setUserId(id);
-		message.setRead("0");
+		message.setRd("0");
 		message.setCreateTime(new Date());
 		if(VerifyEnum.YES.getCode().equals(verify)) {
-			message.setContent(Constants.VERIFY_YES);
+			message.setContext(Constants.VERIFY_YES);
 		}else {
-			message.setContent(Constants.VERIFY_NO);
+			message.setContext(Constants.VERIFY_NO);
 		}
 		messageMapper.insertSelective(message);
 		return ok();

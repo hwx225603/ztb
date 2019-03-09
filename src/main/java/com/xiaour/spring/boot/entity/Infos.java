@@ -18,8 +18,19 @@ public class Infos {
     private String type;
 
     private String content;
+    
+    private String phone;
+    
 
-    public Integer getId() {
+    public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Integer getId() {
         return id;
     }
 

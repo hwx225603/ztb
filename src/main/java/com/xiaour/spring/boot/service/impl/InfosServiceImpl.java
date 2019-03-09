@@ -16,8 +16,18 @@ public class InfosServiceImpl implements InfosServicee {
 	private InfosMapper mapper;
 
 	@Override
-	public List<Infos> getListByType(String type) {
-		return mapper.selectByType(type);
+	public List<Infos> getListByType(String type,Integer pageNo,Integer pageSize) {
+		if(null == pageNo || pageNo <= 0) {
+			pageNo = 1;
+		}
+		if(null == pageSize || pageSize <= 0) {
+			pageNo = 10;
+		}
+		//从第几条数据开始
+		Integer first = (pageNo - 1) * pageSize;
+        //到第几条数据结束
+		Integer last = pageSize * pageSize;
+		return mapper.selectByType(type,first,last);
 	}
 
 	@Override
