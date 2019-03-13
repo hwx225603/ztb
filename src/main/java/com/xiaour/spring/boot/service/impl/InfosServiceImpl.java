@@ -21,18 +21,27 @@ public class InfosServiceImpl implements InfosServicee {
 			pageNo = 1;
 		}
 		if(null == pageSize || pageSize <= 0) {
-			pageNo = 10;
+			pageSize = 10;
 		}
 		//从第几条数据开始
 		Integer first = (pageNo - 1) * pageSize;
         //到第几条数据结束
 		Integer last = pageSize * pageSize;
-		return mapper.selectByType(type,first,last);
+		if(type.equals("0")) {
+			return mapper.selectAll(first,last);
+		}else {
+			return mapper.selectByType(type,first,last);
+		}
 	}
 
 	@Override
 	public Infos getDetail(Integer id) {
 		return mapper.selectByPrimaryKey(id);
 	}
-
+	public static void main(String[] args) {
+		Integer pageNo = 1;
+		Integer pageSize = 10;
+		Integer first = (pageNo - 1) * pageSize;
+		System.out.println(first);
+	}
 }

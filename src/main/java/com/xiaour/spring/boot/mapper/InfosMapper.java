@@ -22,4 +22,6 @@ public interface InfosMapper {
     int updateByPrimaryKey(Infos record);
 
 	List<Infos> selectByType(@Param("type")String type, @Param("first")Integer first, @Param("last")Integer last);
+
+	List<Infos> selectAll(@Param("first")Integer first,  @Param("last")Integer last);
 }

@@ -43,10 +43,12 @@ public class IndexCtrol extends BaseController{
 	}
 	
 	@ApiOperation(value="动态信息列表获取")
-	@ApiImplicitParam(name = "type", value = "信息类型(1-最新动态，2-甲方需求，3-乙方需求，4-平台担保，5-曝光台)", required = true, dataType = "String",paramType = "query")
+	@ApiImplicitParam(name = "type", value = "信息类型(1-最新动态，2-甲方需求，3-乙方需求，4-平台担保，5-曝光台" + 
+			"6-推广甲方，7-效果渠道，8-线下流量，9-市场优化，10-流量互换" + 
+			"11-营销短信，12-代理加盟，0或者不传-全部)", required = false, dataType = "String",paramType = "query")
 	@RequestMapping(value="/infos",method = RequestMethod.GET)
 	public ResultModel getInfos(String type,Integer pageNo,Integer pageSize) {
-		type = type==null?"1":type;
+		type = type==null?"0":type;
 		List<Infos> infos = infosService.getListByType(type,pageNo,pageSize);
 		List<Infos> resp = new ArrayList<Infos>();
 		for(Infos info : infos) {

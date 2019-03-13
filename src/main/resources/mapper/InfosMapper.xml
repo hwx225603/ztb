@@ -54,7 +54,7 @@
       <if test="postion != null" >
         postion,
       </if>
-      <if test="create_time != null" >
+      <if test="createTime != null" >
         create_time,
       </if>
       <if test="type != null" >
@@ -80,7 +80,7 @@
       <if test="postion != null" >
         #{postion,jdbcType=VARCHAR},
       </if>
-      <if test="create_time != null" >
+      <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="type != null" >
@@ -106,7 +106,7 @@
       <if test="postion != null" >
         postion = #{postion,jdbcType=VARCHAR},
       </if>
-      <if test="create_time != null" >
+      <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="type != null" >
@@ -144,5 +144,12 @@
     from infos
     where type = #{type,jdbcType=VARCHAR} order by create_time DESC limit #{first,jdbcType=INTEGER},#{last,jdbcType=INTEGER}
   </select>
+  
+   <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from infos order by create_time DESC limit #{first,jdbcType=INTEGER},#{last,jdbcType=INTEGER}
+  </select>
+  
   
 </mapper>
