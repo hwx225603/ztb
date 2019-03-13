@@ -32,7 +32,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         String authorization = request.getHeader(Constants.AUTHORIZATION);
-        authorization = "1_f213db28fc264c5b8f4a708dcf431217";
+//        authorization = "1_f213db28fc264c5b8f4a708dcf431217";
         //验证token
         TokenModel model = tokenService.getToken(authorization);
         if (tokenService.checkToken(model)) {
