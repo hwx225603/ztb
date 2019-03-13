@@ -26,7 +26,7 @@ public class InfosServiceImpl implements InfosServicee {
 		//从第几条数据开始
 		Integer first = (pageNo - 1) * pageSize;
         //到第几条数据结束
-		Integer last = pageSize * pageSize;
+		Integer last = pageNo * pageSize;
 		if(type.equals("0")) {
 			return mapper.selectAll(first,last);
 		}else {
