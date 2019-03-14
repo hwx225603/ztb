@@ -7,7 +7,7 @@
     <groupId>com.tony</groupId>
     <artifactId>ztb</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>ztb</name>
     <description>zhituibao</description>
     <!-- 继承父包,此包会添加依赖,spring用到的核心包 -->
@@ -130,7 +130,12 @@
 	<artifactId>springfox-swagger2</artifactId>
 	<version>2.7.0</version>
 </dependency>
-
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>3.1.0</version>
+    <scope>provided</scope>
+</dependency>
 <dependency>
 	<groupId>io.springfox</groupId>
 	<artifactId>springfox-swagger-ui</artifactId>
@@ -149,13 +154,11 @@
     </properties>
 
     <build>
+    <finalName>ztb</finalName>
         <plugins>
-            <plugin>
+           <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                <mainClass>com.xiaour.spring.boot.Application</mainClass>
-                </configuration>
             </plugin>
 	<plugin>
 		<groupId>org.mybatis.generator</groupId>

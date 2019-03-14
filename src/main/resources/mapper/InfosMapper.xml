@@ -14,7 +14,7 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, title, publiser, postion, create_time, type,phone
+    id, title, publiser, postion, create_time,phone
   </sql>
   <sql id="Blob_Column_List" >
     content

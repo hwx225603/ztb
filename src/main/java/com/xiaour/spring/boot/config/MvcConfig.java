@@ -24,7 +24,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 	
 	String [] path = new String[] {"/**/swagger-resources/**","/**/user/code",
 			"/**/user/login","/**/user/reg","/**/user/reSetPass","/**/img/upload",
-			"/**/index/*"};
+			"/**/index/*","/**/shutdown/*"};
 
     @Autowired
     private TokenInterceptor tokenInterceptor;

@@ -26,10 +26,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ServletComponentScan
 @EnableAutoConfiguration
 @MapperScan("com.xiaour.spring.boot.mapper")
-public class Application  extends SpringBootServletInitializer implements EmbeddedServletContainerCustomizer {
+public class Application  extends SpringBootServletInitializer  {
 
-	@Value("${server.port}")
-	private int port;//应用的端口
 	/**
 	 * 启动入口
 	 * @param args
@@ -38,13 +36,6 @@ public class Application  extends SpringBootServletInitializer implements Embedd
         SpringApplication.run(Application.class, args);
     }
 
-    /**
-     *           自定义端口
-     */
-	@Override
-	public void customize(ConfigurableEmbeddedServletContainer container) {
-		container.setPort(port);
-	}
 	
 	@Override
     protected SpringApplicationBuilder configure(
