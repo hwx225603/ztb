@@ -20,6 +20,7 @@ import com.xiaour.spring.boot.service.ApproveService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -43,9 +44,12 @@ public class ApproveCtrol extends BaseController{
 	
 	@ApiOperation(value="审核")
 	@GetMapping("/put")
-	@ApiImplicitParam(name = "verify", value = "2-通过 3-不通过", required = true, dataType = "String",paramType = "query")
-	public ResultModel putReult(Integer id,String verify) throws Exception{
-		approveService.putReult(id,verify);
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "verify", value = "2-通过 3-不通过", required = true, dataType = "String",paramType = "query"),
+		@ApiImplicitParam(name = "type", value = "1-个人 2-企业", required = true, dataType = "String",paramType = "query")
+	})
+	public ResultModel putReult(Integer id,String verify,String type) throws Exception{
+		approveService.putReult(id,verify,type);
 		//审核成功或者不成功发送消息
 		Message message = new Message();
 		message.setTitle(Constants.TITLE);

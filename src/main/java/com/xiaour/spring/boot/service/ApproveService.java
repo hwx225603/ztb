@@ -8,7 +8,7 @@ public interface ApproveService {
 
 	List<UserInfo> getList();
 
-	void putReult(Integer id, String verify);
+	void putReult(Integer id, String verify,String type);
 
 	UserInfo getDetail(Integer id);
 

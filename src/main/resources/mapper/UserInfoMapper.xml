@@ -9,8 +9,8 @@
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="ident" property="ident" jdbcType="VARCHAR" />
-    <result column="has_verify" property="hasVerify" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="has_verify_P" property="hasVerifyP" jdbcType="VARCHAR" />
+    <result column="has_verify_C" property="hasVerifyC" jdbcType="VARCHAR" />
     <result column="comp_name" property="compName" jdbcType="VARCHAR" />
     <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="social_code" property="socialCode" jdbcType="VARCHAR" />
@@ -19,7 +19,7 @@
     <result column="ident_pc2" property="identPc2" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, phone, pass_word, name, status, create_time, ident, has_verify, type, comp_name, 
+    id, phone, pass_word, name, status, create_time, ident, has_verify_p,has_verify_c, type, comp_name, 
     tel, social_code, url,ident_pc1,ident_pc2
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -34,12 +34,10 @@
   </delete>
   <insert id="insert" parameterType="com.xiaour.spring.boot.entity.UserInfo" >
     insert into user_info (id, phone, pass_word, 
-      name, ident, type, 
-      comp_name, tel, social_code, 
+      name, ident,comp_name, tel, social_code, 
       url)
     values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, 
-      #{ident,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{ident,jdbcType=VARCHAR},  
       #{compName,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{socialCode,jdbcType=VARCHAR}, 
       #{url,jdbcType=VARCHAR})
   </insert>
@@ -67,11 +65,11 @@
       <if test="ident != null" >
         ident,
       </if>
-      <if test="hasVerify != null" >
-        has_verify,
+      <if test="hasVerifyP != null" >
+        has_verify_p,
       </if>
-      <if test="type != null" >
-        type,
+      <if test="hasVerifyC != null" >
+        has_verify_c,
       </if>
       <if test="compName != null" >
         comp_name,
@@ -108,11 +106,11 @@
       <if test="ident != null" >
         #{ident,jdbcType=VARCHAR},
       </if>
-      <if test="hasVerify != null" >
-        #{hasVerify,jdbcType=VARCHAR},
+      <if test="hasVerifyP != null" >
+        #{hasVerifyP,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        #{type,jdbcType=VARCHAR},
+      <if test="hasVerifyC != null" >
+        #{hasVerifyC,jdbcType=VARCHAR},
       </if>
       <if test="compName != null" >
         #{compName,jdbcType=VARCHAR},
@@ -149,11 +147,11 @@
       <if test="ident != null" >
         ident = #{ident,jdbcType=VARCHAR},
       </if>
-      <if test="hasVerify != null" >
-        has_verify = #{hasVerify,jdbcType=VARCHAR},
+      <if test="hasVerifyP != null" >
+        has_verify_p = #{hasVerifyP,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=VARCHAR},
+      <if test="hasVerifyC != null" >
+        has_verify_c = #{hasVerifyC,jdbcType=VARCHAR},
       </if>
       <if test="compName != null" >
         comp_name = #{compName,jdbcType=VARCHAR},
@@ -184,8 +182,8 @@
       status = #{status,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       ident = #{ident,jdbcType=VARCHAR},
-      has_verify = #{hasVerify,jdbcType=VARCHAR},
-      type = #{type,jdbcType=VARCHAR},
+      has_verify_p = #{hasVerifyP,jdbcType=VARCHAR},
+      has_verify_c = #{hasVerifyC,jdbcType=VARCHAR},
       comp_name = #{compName,jdbcType=VARCHAR},
       tel = #{tel,jdbcType=VARCHAR},
       social_code = #{socialCode,jdbcType=VARCHAR},
@@ -205,6 +203,6 @@
     select 
     <include refid="Base_Column_List" />
     from user_info
-    where has_verify = '1';
+    where has_verify_p = '1' or has_verify_c = '1';
   </select>
 </mapper>

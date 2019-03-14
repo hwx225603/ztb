@@ -255,7 +255,8 @@ public class UserCtorl extends BaseController{
 	@ApiOperation(value="发布需求")
 	@PostMapping("/pub")
 	public ResultModel pub(@ApiIgnore @CurrentUser UserInfo userInfo,InfosReq req) {
-		if(!VerifyEnum.YES.getCode().equals(userInfo.getHasVerify())) {
+		if(!VerifyEnum.YES.getCode().equals(userInfo.getHasVerifyP()) && 
+				!VerifyEnum.YES.getCode().equals(userInfo.getHasVerifyC())) {
 			return error("请先进行用户认证");
 		}
 		Infos infos = new Infos();
@@ -263,14 +264,12 @@ public class UserCtorl extends BaseController{
 		infos.setContent(req.getContent());
 		infos.setType(req.getType());
 		infos.setPhone(userInfo.getPhone());
-		if("1".equals(userInfo.getType())) {//个人
-			if(null != userInfo.getName() && userInfo.getName().length() >= 2) {
-				infos.setPubliser(userInfo.getName().substring(0,1)+"*");
-			}else {
-				infos.setPubliser(userInfo.getName());
-			}
-		}else {
+		if(null != userInfo.getCompName()) {
 			infos.setPubliser(userInfo.getCompName());
+		}else if(null != userInfo.getName() && userInfo.getName().length() >= 2) {
+			infos.setPubliser(userInfo.getName().substring(0,1)+"*");
+		}else{
+			infos.setPubliser(userInfo.getName());
 		}
 		mapper.insertSelective(infos);
 		return ok();

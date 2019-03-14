@@ -17,9 +17,9 @@ public class UserInfo {
     
     private String ident;
 
-    private String hasVerify;
+    private String hasVerifyP;
 
-    private String type;
+    private String hasVerifyC;
 
     private String compName;
 
@@ -106,23 +106,23 @@ public class UserInfo {
         this.ident = ident == null ? null : ident.trim();
     }
 
-    public String getHasVerify() {
-        return hasVerify;
-    }
+    public String getHasVerifyP() {
+		return hasVerifyP;
+	}
 
-    public void setHasVerify(String hasVerify) {
-        this.hasVerify = hasVerify == null ? null : hasVerify.trim();
-    }
+	public void setHasVerifyP(String hasVerifyP) {
+		this.hasVerifyP = hasVerifyP;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getHasVerifyC() {
+		return hasVerifyC;
+	}
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
-    }
+	public void setHasVerifyC(String hasVerifyC) {
+		this.hasVerifyC = hasVerifyC;
+	}
 
-    public String getCompName() {
+	public String getCompName() {
         return compName;
     }
 

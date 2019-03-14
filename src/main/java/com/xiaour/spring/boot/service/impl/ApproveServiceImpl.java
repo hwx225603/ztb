@@ -21,10 +21,14 @@ public class ApproveServiceImpl implements ApproveService {
 	}
 
 	@Override
-	public void putReult(Integer id, String verify) {
+	public void putReult(Integer id, String verify,String type) {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setId(id);
-		userInfo.setHasVerify(verify);
+		if("1".equals(type)) {
+			userInfo.setHasVerifyP(verify);	
+		}else {
+			userInfo.setHasVerifyC(verify);	
+		}
 		mapper.updateByPrimaryKeySelective(userInfo);
 	}
 

@@ -35,7 +35,11 @@ public class UserInfoServiceImpl implements UserInfoService{
 		UserInfo user = new UserInfo();
 		BeanUtils.copyProperties(req, user);
 		user.setId(id);
-		user.setHasVerify("1");//认证中
+		if("1".equals(req.getType())) {
+			user.setHasVerifyP("1");//认证中
+		}else {
+			user.setHasVerifyC("1");//认证中
+		}
 		userInfoMapper.updateByPrimaryKeySelective(user);
 	}
 
