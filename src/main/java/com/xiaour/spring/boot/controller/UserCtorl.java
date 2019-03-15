@@ -135,7 +135,10 @@ public class UserCtorl extends BaseController{
 		user.setPassWord(passWord);
 		user.setStatus("1");
 		userInfoMapper.insert(user);
-		return ok();
+		UserInfo userInfo = userInfoMapper.selectByPhone(phone);
+		// 生成一个token，保存用户登录状态
+		TokenModel model = tokenService.createToken(userInfo.getId());
+		return ok(model);
 	}
   
 	@ApiOperation(value="发短信")
