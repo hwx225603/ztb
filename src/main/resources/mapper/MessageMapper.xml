@@ -129,6 +129,6 @@
     select 
     <include refid="Base_Column_List" />
     from message
-    where user_id = #{userId,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER} order by create_time desc
   </select>
 </mapper>
