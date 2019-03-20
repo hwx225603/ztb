@@ -10,4 +10,6 @@ public interface InfosServicee {
 
 	Infos getDetail(Integer id);
 
+	void delete(String ids);
+
 }

@@ -66,5 +66,12 @@ public class IndexCtrol extends BaseController{
 		return ok(info);
 	}
 	
+	@ApiOperation(value="动态信息删除")
+	@ApiImplicitParam(name = "ids", value = "IDS(英文逗号分隔)", required = true, dataType = "String",paramType = "query")
+	@RequestMapping(value="/del",method = RequestMethod.GET)
+	public ResultModel delete(String ids) {
+		infosService.delete(ids);
+		return ok();
+	}
 	
 }

@@ -38,10 +38,16 @@ public class InfosServiceImpl implements InfosServicee {
 	public Infos getDetail(Integer id) {
 		return mapper.selectByPrimaryKey(id);
 	}
-	public static void main(String[] args) {
-		Integer pageNo = 1;
-		Integer pageSize = 10;
-		Integer first = (pageNo - 1) * pageSize;
-		System.out.println(first);
+
+	@Override
+	public void delete(String ids) {
+		if(null != ids) {
+			String [] idss = ids.split(",");
+			if(null != idss && idss.length > 0) {
+				for(String id : idss) {
+					mapper.deleteByPrimaryKey(Integer.parseInt(id));
+				}
+			}
+		}
 	}
 }
