@@ -12,4 +12,6 @@ public interface InfosServicee {
 
 	void delete(String ids);
 
+	Integer getTotal(String type);
+
 }

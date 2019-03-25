@@ -50,4 +50,13 @@ public class InfosServiceImpl implements InfosServicee {
 			}
 		}
 	}
+
+	@Override
+	public Integer getTotal(String type) {
+		if(type.equals("0")) {
+			return mapper.selectTotal();
+		}else {
+			return mapper.selectTotalByType(type);
+		}
+	}
 }

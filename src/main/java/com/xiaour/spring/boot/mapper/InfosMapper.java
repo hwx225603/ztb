@@ -24,4 +24,8 @@ public interface InfosMapper {
 	List<Infos> selectByType(@Param("type")String type, @Param("first")Integer first, @Param("last")Integer last);
 
 	List<Infos> selectAll(@Param("first")Integer first,  @Param("last")Integer last);
+
+	Integer selectTotal();
+
+	Integer selectTotalByType(@Param("type")String type);
 }

@@ -16,6 +16,7 @@ import com.xiaour.spring.boot.entity.Infos;
 import com.xiaour.spring.boot.service.BannerService;
 import com.xiaour.spring.boot.service.InfosServicee;
 import com.xiaour.spring.boot.utils.DateUtil;
+import com.xiaour.spring.boot.vo.resp.IndexResp;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -55,7 +56,10 @@ public class IndexCtrol extends BaseController{
 			info.setTime(DateUtil.getDateX(info.getCreateTime(), new Date()));
 			resp.add(info);
 		}
-		return ok(resp);
+		IndexResp res = new IndexResp();
+		res.setList(resp);
+		res.setTotal(infosService.getTotal(type));
+		return ok(res);
 	}
 	
 	@ApiOperation(value="动态信息详情获取")
